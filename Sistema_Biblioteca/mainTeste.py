@@ -64,15 +64,21 @@ def verAutores():
 
 def verAlugueis():
     sql = """
-        SELECT a.id_aluguel, l.titulo_livro, c.nome_cliente, a.data_aluguel, a.data_devolucao
-        FROM aluguel a
-        JOIN livros l ON a.livro_id = l.id_livro
-        JOIN clientes c ON a.cliente_id = c.id_cliente;
+    SELECT 
+        id_aluguel,
+        titulo_livro,
+        nome_cliente,
+        data_aluguel,
+        data_devolucao
+    FROM aluguel
+    JOIN livros ON id_livro = livro_id
+    JOIN clientes ON id_cliente = cliente_id;
     """
+    
     with ConexaoDB(db_config) as db:
         alugueis = db.consultar(sql)
         if alugueis:
-            print("\nLista de Aluguéis:")
+            print("\nLista de Alugueis:")
             for aluguel in alugueis:
                 print(f"ID: {aluguel['id_aluguel']} | Livro: {aluguel['titulo_livro']} | Cliente: {aluguel['nome_cliente']} | Data Aluguel: {aluguel['data_aluguel']} | Devolução: {aluguel['data_devolucao']}")
         else:
@@ -80,8 +86,8 @@ def verAlugueis():
 
 def cadastrarCliente():
     nome = input("Nome do Cliente: ")
-    email = input("Email (deixe em branco se não tiver): ")
-    cpf = input("CPF (11 dígitos): ")
+    email = input("Email: ")
+    cpf = input("CPF '11 dígitos': ")
     
     sql = "INSERT INTO clientes (nome_cliente, email, cpf_cliente) VALUES (%s, %s, %s);"
     params = (nome, email if email else None, cpf)
@@ -104,8 +110,17 @@ def cadastrarAutor():
             print("\nFalha ao cadastrar autor.")
 
 def cadastrarAluguel():
-    livro_id = input("ID do Livro: ")
+    # 1. Exibir lista de clientes
+    # 2. Pedir ao usuario o ID do cliente que alugou
+    # 3. Exibir lista de livros 
+    # 4. Pedir ao usuario o ID do livro, alugado 
+    # 5. Executar SQL de inserção do novo aluguel
+    
+    verClientes()
     cliente_id = input("ID do Cliente: ")
+    
+    verLivros()
+    livro_id = input("ID do Livro: ")
     data_aluguel = input("Data de Aluguel (AAAA-MM-DD): ")
 
     sql = "INSERT INTO aluguel (livro_id, cliente_id, data_aluguel) VALUES (%s, %s, %s);"
