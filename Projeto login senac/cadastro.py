@@ -34,7 +34,6 @@ lbl_title.place(x=180, y=80)
 lbl_sub = tk.Label(frame_direita, text="Bem-vindo ao Sistema de Controle de Empréstimo de Drone",font=("Arial", 10), bg=BRANCO, fg="gray")
 lbl_sub.place(x=140, y=120)
 
-# ===== CAMPOS DE ENTRADA =====
 def placeholder(entry, text):
     entry.insert(0, text)
     entry.config(fg="gray")
