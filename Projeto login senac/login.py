@@ -1,11 +1,9 @@
-# Arquivo: login.py
 
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
-from cadastro import abrir_cadastro # Importa a função do arquivo cadastro.py
+from cadastro import abrir_cadastro
 
-# --- Cores ---
 AZUL = "#0a2c61"
 LARANJA = "#e68a00"
 BRANCO = "#ffffff"
@@ -38,8 +36,6 @@ def abrir_login():
     def ir_para_cadastro():
         """Fecha a janela de login e abre a de cadastro."""
         window_login.destroy()
-        # Passa a própria função 'abrir_login' como callback
-        # para que a janela de cadastro saiba como voltar.
         abrir_cadastro(abrir_login)
 
     # --- FRAME ESQUERDA (LOGO) ---
@@ -51,7 +47,7 @@ def abrir_login():
         img = img.resize((175, 150))
         logo = ImageTk.PhotoImage(img)
         lbl_logo = tk.Label(frame_esquerda, image=logo, bg=AZUL)
-        lbl_logo.image = logo # Mantém referência
+        lbl_logo.image = logo 
         lbl_logo.place(x=50, y=190)
     except FileNotFoundError:
         print("Arquivo 'senacbranco.png' não encontrado. Verifique o caminho.")
@@ -82,7 +78,7 @@ def abrir_login():
     btn_login = tk.Button(frame_direita, text="Login", bg=AZUL, fg=BRANCO, font=("Arial", 10), width=32, relief="flat", bd=3)
     btn_login.place(x=200, y=350, height=30)
     
-    # Botão de cadastro agora chama a função para trocar de janela
+   
     btn_cadastro = tk.Button(frame_direita, text="Cadastrar-se", bg=LARANJA, fg=BRANCO, font=("Arial", 10), width=32, relief="flat", bd=3, command=ir_para_cadastro)
     btn_cadastro.place(x=200, y=390, height=30)
     

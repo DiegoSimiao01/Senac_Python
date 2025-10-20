@@ -1,10 +1,7 @@
-# Arquivo: cadastro.py
-
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 
-# --- Cores ---
 AZUL = "#0a2c61"
 LARANJA = "#e68a00"
 BRANCO = "#ffffff"
