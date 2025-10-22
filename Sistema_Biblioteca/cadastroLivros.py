@@ -15,7 +15,7 @@ db_config = {
 
 meuBanco = ConexaoDB(db_config)
 
-# --- FUNÇÃO 'fetch_books' MODIFICADA ---
+# --- FUNÇÃO 'fetch_books' ---
 def fetch_books(autor_id=None, search_term=None):
     """
     Busca livros. Filtra por autor_id E/OU search_term (no título).
@@ -59,7 +59,7 @@ def fetch_authors():
     with ConexaoDB(db_config) as db:
         return db.consultar(sql)
 
-# --- FUNÇÃO 'limpar_campos' MODIFICADA ---
+# --- FUNÇÃO 'limpar_campos' ---
 def limpar_campos(titulo_var, ano_var, autor_nome_var, pesquisa_var, tree):
     """Limpa os campos de entrada e deseleciona qualquer item na árvore."""
     titulo_var.set("")
@@ -76,93 +76,89 @@ def limpar_campos(titulo_var, ano_var, autor_nome_var, pesquisa_var, tree):
     if selection:
         tree.selection_remove(selection)
 
-# --- FUNÇÃO 'cadastrar_livro' MODIFICADA ---
-# Precisa de 'pesquisa_var' para passar para 'limpar_campos'
-def cadastrar_livro(titulo_var, ano_var, autor_nome_var, autor_map, pesquisa_var, tree):
+# --- FUNÇÃO 'cadastrar_livro' ---
+def cadastrar_livro(titulo_var, ano_var, autor_nome_var, autor_map, ent_pesquisa, tree):
     if tree.selection():
         messagebox.showwarning("Aviso", "Um livro está selecionado para edição.\nClique em 'Limpar' primeiro se deseja cadastrar um novo livro.")
         return
-
+    
     titulo = titulo_var.get().strip()
     ano = ano_var.get().strip()
     autor_nome = autor_nome_var.get().strip() 
 
-    if not titulo:
-        messagebox.showerror("Erro", "Título é obrigatório.")
+    if not titulo: messagebox.showerror("Erro", "Por favor, digite o título do livro."); return
+
+    # 1. Verifica se o campo Ano está vazio
+    if not ano:
+        messagebox.showerror("Erro", "Por favor, digite o ano de publicação.")
         return
-    if ano and not ano.isdigit():
-        messagebox.showerror("Erro", "Ano inválido.")
+    # 2. Verifica se o campo Ano contém apenas números
+    if not ano.isdigit(): 
+        messagebox.showerror("Erro", "Ano inválido. Digite apenas números.")
         return
-    
+        
     autor_id = autor_map.get(autor_nome) 
-    if not autor_id:
-        messagebox.showerror("Erro", "Autor inválido ou não selecionado.")
-        return
+    if not autor_id: messagebox.showerror("Erro", "Autor inválido ou não selecionado."); return
 
     sql = "INSERT INTO livros (titulo_livro, ano_publicacao, autor_id) VALUES (%s, %s, %s);"
-    params = (titulo, ano if ano else None, autor_id) 
+    params = (titulo, ano, autor_id) 
 
     with ConexaoDB(db_config) as db:
         ok = db.manipular(sql, params)
 
     if ok:
         messagebox.showinfo("Sucesso", "Livro cadastrado com sucesso!")
-        # Limpa os campos (o que já atualiza a lista)
-        limpar_campos(titulo_var, ano_var, autor_nome_var, pesquisa_var, tree) 
+        limpar_campos(titulo_var, ano_var, autor_nome_var, ent_pesquisa, tree)
+        refresh_book_list(tree, autor_nome_var, autor_map, ent_pesquisa)
     else:
         messagebox.showerror("Erro", "Falha ao cadastrar livro.")
 
-# --- FUNÇÃO 'alterar_livro' MODIFICADA ---
+# --- FUNÇÃO 'alterar_livro' ---
 # Precisa de 'pesquisa_var' para passar para 'limpar_campos'
-def alterar_livro(titulo_var, ano_var, autor_nome_var, autor_map, pesquisa_var, tree):
+def alterar_livro(titulo_var, ano_var, autor_nome_var, autor_map, ent_pesquisa, tree):
     selected_item = tree.selection()
-    if not selected_item:
-        messagebox.showerror("Erro", "Selecione um livro na lista para alterar.")
-        return
-
+    if not selected_item: messagebox.showerror("Erro", "Selecione um livro na lista para alterar."); return
     try:
-        item_values = tree.item(selected_item[0], 'values')
-        id_livro = item_values[0]
+        id_livro = tree.item(selected_item[0], 'values')[0]
     except IndexError:
-        messagebox.showerror("Erro", "Não foi possível obter o ID do livro selecionado.")
-        return
-
+        messagebox.showerror("Erro", "Não foi possível obter o ID do livro selecionado."); return
+    
     titulo = titulo_var.get().strip()
     ano = ano_var.get().strip()
     autor_nome = autor_nome_var.get().strip()
 
-    if not titulo:
-        messagebox.showerror("Erro", "Título é obrigatório.")
-        return
-    if ano and not ano.isdigit():
-        messagebox.showerror("Erro", "Ano inválido.")
-        return
-    
-    autor_id = autor_map.get(autor_nome)
-    if not autor_id:
-        messagebox.showerror("Erro", "Autor inválido ou não selecionado.")
-        return
+    if not titulo: messagebox.showerror("Erro", "Por favor, digite o título do livro."); return
 
-    confirm = messagebox.askyesno(
-        "Confirmar Alteração", 
-        f"Tem certeza que deseja salvar as alterações para o livro ID: {id_livro}?"
-    )
-    if not confirm:
+    # 1. Verifica se o campo Ano está vazio
+    if not ano:
+        messagebox.showerror("Erro", "Por favor, digite o ano de publicação.")
         return
+    # 2. Verifica se o campo Ano contém apenas números
+    if not ano.isdigit(): 
+        messagebox.showerror("Erro", "Ano inválido. Digite apenas números.")
+        return
+    # --- FIM DA MUDANÇA ---
+        
+    autor_id = autor_map.get(autor_nome)
+    if not autor_id: messagebox.showerror("Erro", "Autor inválido ou não selecionado."); return
+
+    confirm = messagebox.askyesno("Confirmar Alteração", f"Salvar alterações para o livro ID: {id_livro}?")
+    if not confirm: return
 
     sql = "UPDATE livros SET titulo_livro = %s, ano_publicacao = %s, autor_id = %s WHERE id_livro = %s;"
-    params = (titulo, ano if ano else None, autor_id, id_livro)
+    params = (titulo, ano, autor_id, id_livro)
 
     with ConexaoDB(db_config) as db:
         ok = db.manipular(sql, params)
 
     if ok:
         messagebox.showinfo("Sucesso", "Livro alterado com sucesso!")
-        limpar_campos(titulo_var, ano_var, autor_nome_var, pesquisa_var, tree) 
+        limpar_campos(titulo_var, ano_var, autor_nome_var, ent_pesquisa, tree)
+        refresh_book_list(tree, autor_nome_var, autor_map, ent_pesquisa)
     else:
         messagebox.showerror("Erro", "Falha ao alterar livro.")
 
-# --- FUNÇÃO 'deletar_livro' MODIFICADA ---
+# --- FUNÇÃO 'deletar_livro' ---
 # Precisa de 'pesquisa_var' para passar para 'limpar_campos'
 def deletar_livro(tree, titulo_var, ano_var, autor_nome_var, pesquisa_var):
     selected_item = tree.selection() 
@@ -198,7 +194,7 @@ def deletar_livro(tree, titulo_var, ano_var, autor_nome_var, pesquisa_var):
     else:
         messagebox.showerror("Erro", "Falha ao deletar o livro.")
 
-# --- FUNÇÃO 'refresh_tree' MODIFICADA ---
+# --- FUNÇÃO 'refresh_tree' ---
 def refresh_tree(tree, autor_id=None, search_term=None):
     """
     Atualiza a árvore. Filtra por autor_id E/OU search_term.
@@ -237,7 +233,6 @@ def on_tree_select(event, tree, titulo_var, ano_var, autor_nome_var):
         autor_nome_var.set("Mostrar todos os autores")
 
 # --- NOVA FUNÇÃO CENTRALIZADA PARA ATUALIZAR A LISTA ---
-# Substitui 'on_author_filter_changed'
 def refresh_book_list(tree, autor_nome_var, autor_map, pesquisa_var):
     """Pega os filtros atuais (autor e pesquisa) e atualiza a árvore."""
     
@@ -256,16 +251,13 @@ def refresh_book_list(tree, autor_nome_var, autor_map, pesquisa_var):
         
     # 3. Chama a função de atualização
     refresh_tree(tree, autor_id=autor_id, search_term=search_term)
-# --- FIM DA NOVA FUNÇÃO ---
-
-
+    
 def build_gui():
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
 
     app = ctk.CTk()
     app.title("Cadastro de Livros")
-    # Aumentei um pouco a altura para caber o campo de pesquisa
     app.geometry("900x460") 
 
     frame = ctk.CTkFrame(master=app, corner_radius=8)
@@ -286,9 +278,9 @@ def build_gui():
     titulo_var = StringVar()
     ano_var = StringVar()
     autor_nome_var = StringVar() 
-    pesquisa_var = StringVar() # --- NOVA VARIÁVEL ---
+    pesquisa_var = StringVar()
 
-    # --- CAMPOS DE CADASTRO/ALTERAÇÃO (row 0-2) ---
+    # --- CAMPOS DE CADASTRO/ALTERAÇÃO 
     lbl_titulo = ctk.CTkLabel(master=frame, text="Título:")
     lbl_titulo.grid(row=0, column=0, sticky="w", padx=(10,6), pady=(10,6))
     ent_titulo = ctk.CTkEntry(master=frame, textvariable=titulo_var, width=420)
@@ -307,46 +299,40 @@ def build_gui():
                                 values=autor_nomes,
                                 width=200,
                                 state="readonly",
-                                # --- MODIFICADO ---
-                                # Chama a nova função centralizada
                                 command=lambda value: refresh_book_list(
                                     tree, autor_nome_var, autor_map, pesquisa_var
                                 ))
     cmb_autor.grid(row=2, column=1, sticky="w", pady=6)
     cmb_autor.set("Mostrar todos os autores") 
     
-    # --- NOVO CAMPO DE PESQUISA (row 3) ---
     lbl_pesquisa = ctk.CTkLabel(master=frame, text="Pesquisar:")
     lbl_pesquisa.grid(row=3, column=0, sticky="w", padx=(10,6), pady=(6,12))
     ent_pesquisa = ctk.CTkEntry(master=frame, textvariable=pesquisa_var, width=200,
                                 placeholder_text="Digite um título para filtrar...")
     ent_pesquisa.grid(row=3, column=1,sticky="w", pady=(6,12))
     
-    # "Trace" (monitorar) a variável de pesquisa.
     # 'write' é chamado toda vez que o texto muda (usuário digita ou apaga)
     pesquisa_var.trace_add("write", lambda *args: refresh_book_list(
         tree, autor_nome_var, autor_map, pesquisa_var
     ))
     # --- FIM DO CAMPO DE PESQUISA ---
 
-    # --- BOTÕES (row 4) --- (era row 3)
+    # --- BOTÕES 
     btn_frame = ctk.CTkFrame(master=frame, fg_color="transparent")
     btn_frame.grid(row=4, column=0, columnspan=2, sticky="w", padx=10, pady=(6,12))
 
-    # --- TREEVIEW (row 5) --- (era row 4)
+    # --- TREEVIEW 
     tree_frame = ctk.CTkFrame(master=frame)
     tree_frame.grid(row=5, column=0, columnspan=2, sticky="nsew", padx=10, pady=(6,10))
 
     # --- BOTÕES (configuração) ---
     cadastrar_btn = ctk.CTkButton(master=btn_frame, text="Cadastrar", width=140,
-                                  # Passa 'pesquisa_var'
                                   command=lambda: cadastrar_livro(
                                       titulo_var, ano_var, autor_nome_var, autor_map, pesquisa_var, tree
                                   ))
     cadastrar_btn.grid(row=0, column=0, padx=6)
 
     alterar_btn = ctk.CTkButton(master=btn_frame, text="Alterar", width=140,
-                                  # Passa 'pesquisa_var'
                                   command=lambda: alterar_livro(
                                       titulo_var, ano_var, autor_nome_var, autor_map, pesquisa_var, tree
                                   ))
@@ -355,7 +341,6 @@ def build_gui():
     deletar_btn = ctk.CTkButton(master=btn_frame, 
                                 text="Deletar", 
                                 width=140,
-                                # Passa 'pesquisa_var'
                                 command=lambda: deletar_livro(tree, titulo_var, ano_var, autor_nome_var, pesquisa_var),
                                 fg_color="#D32F2F",    
                                 hover_color="#B71C1C") 
@@ -364,7 +349,6 @@ def build_gui():
     limpar_btn = ctk.CTkButton(master=btn_frame,
                                text="Limpar",
                                width=140,
-                               # Passa 'pesquisa_var'
                                command=lambda: limpar_campos(titulo_var, ano_var, autor_nome_var, pesquisa_var, tree),
                                fg_color="#555555",
                                hover_color="#333333")
@@ -391,7 +375,7 @@ def build_gui():
 
     # --- LAYOUT RESPONSIVO ---
     frame.grid_columnconfigure(1, weight=1)
-    frame.grid_rowconfigure(5, weight=1) # (era row 4)
+    frame.grid_rowconfigure(5, weight=1) 
 
     # Carrega a lista inicial (mostrando todos, sem pesquisa)
     refresh_book_list(tree, autor_nome_var, autor_map, pesquisa_var)
