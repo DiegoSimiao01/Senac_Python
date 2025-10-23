@@ -258,7 +258,7 @@ def build_gui():
 
     app = ctk.CTk()
     app.title("Cadastro de Livros")
-    app.geometry("900x460") 
+    app.geometry("800x900+500+50") # Define tamanho inicial(900x600) e posição (450+150)
 
     frame = ctk.CTkFrame(master=app, corner_radius=8)
     frame.pack(fill="both", expand=True, padx=12, pady=12)
@@ -326,20 +326,20 @@ def build_gui():
     tree_frame.grid(row=5, column=0, columnspan=2, sticky="nsew", padx=10, pady=(6,10))
 
     # --- BOTÕES (configuração) ---
-    cadastrar_btn = ctk.CTkButton(master=btn_frame, text="Cadastrar", width=140,
+    cadastrar_btn = ctk.CTkButton(master=btn_frame, text="Cadastrar 📝", width=140,
                                   command=lambda: cadastrar_livro(
                                       titulo_var, ano_var, autor_nome_var, autor_map, pesquisa_var, tree
                                   ))
     cadastrar_btn.grid(row=0, column=0, padx=6)
 
-    alterar_btn = ctk.CTkButton(master=btn_frame, text="Alterar", width=140,
+    alterar_btn = ctk.CTkButton(master=btn_frame, text="Alterar 🔃", width=140,
                                   command=lambda: alterar_livro(
                                       titulo_var, ano_var, autor_nome_var, autor_map, pesquisa_var, tree
                                   ))
     alterar_btn.grid(row=0, column=1, padx=6)
     
     deletar_btn = ctk.CTkButton(master=btn_frame, 
-                                text="Deletar", 
+                                text="Deletar ❌", 
                                 width=140,
                                 command=lambda: deletar_livro(tree, titulo_var, ano_var, autor_nome_var, pesquisa_var),
                                 fg_color="#D32F2F",    
@@ -347,7 +347,7 @@ def build_gui():
     deletar_btn.grid(row=0, column=2, padx=6)
     
     limpar_btn = ctk.CTkButton(master=btn_frame,
-                               text="Limpar",
+                               text="Limpar ⟳",
                                width=140,
                                command=lambda: limpar_campos(titulo_var, ano_var, autor_nome_var, pesquisa_var, tree),
                                fg_color="#555555",
@@ -384,3 +384,4 @@ def build_gui():
 if __name__ == "__main__":
     app = build_gui()
     app.mainloop()
+    

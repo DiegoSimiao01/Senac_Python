@@ -179,7 +179,7 @@ def build_gui():
 
     app = ctk.CTk()
     app.title("Cadastro de Autores")
-    app.geometry("600x400")
+    app.geometry("500x450+650+200")
 
     frame = ctk.CTkFrame(master=app, corner_radius=8)
     frame.pack(fill="both", expand=True, padx=12, pady=12)
@@ -221,20 +221,20 @@ def build_gui():
     scrollbar.pack(side="right", fill="y")
 
     # --- Configuração dos Botões ---
-    cadastrar_btn = ctk.CTkButton(master=btn_frame, text="Cadastrar", width=100,
+    cadastrar_btn = ctk.CTkButton(master=btn_frame, text="Cadastrar 📝", width=100,
                                   command=lambda: cadastrar_autor(nome_var, ent_pesquisa, tree))
     cadastrar_btn.grid(row=0, column=0, padx=6)
 
-    alterar_btn = ctk.CTkButton(master=btn_frame, text="Alterar", width=100,
+    alterar_btn = ctk.CTkButton(master=btn_frame, text="Alterar 🔄", width=100,
                                 command=lambda: alterar_autor(nome_var, ent_pesquisa, tree))
     alterar_btn.grid(row=0, column=1, padx=6)
-    
-    deletar_btn = ctk.CTkButton(master=btn_frame, text="Deletar", width=100,
+
+    deletar_btn = ctk.CTkButton(master=btn_frame, text="Deletar ❌", width=100,
                                 command=lambda: deletar_autor(nome_var, ent_pesquisa, tree),
                                 fg_color="#D32F2F", hover_color="#B71C1C")
     deletar_btn.grid(row=0, column=2, padx=6)
-    
-    limpar_btn = ctk.CTkButton(master=btn_frame, text="Limpar", width=100,
+
+    limpar_btn = ctk.CTkButton(master=btn_frame, text="Limpar ⟳", width=100,
                                command=lambda: limpar_campos(nome_var, ent_pesquisa, tree),
                                fg_color="#555555", hover_color="#333333")
     limpar_btn.grid(row=0, column=3, padx=6)
