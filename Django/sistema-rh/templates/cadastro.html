@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Funcionários - LEÃO RH</title>
+    <title>RH do Leão</title>
     {% load static %}
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <div class="main-container">
-
+        
         <a href="{% url 'pagina_principal' %}" class="btn-back">
             &larr; Voltar para o Início
         </a>
         
         <div class="header">
-            <h1>Cadastrar Funcionário</h1>
+            <h1>Cadastro</h1>
+            <h1>Funcionários</h1>
         </div>
 
         <div class="form-section card">
@@ -45,7 +42,7 @@
                     </select>
                 </div>
                 <button type="submit" class="btn-submit">
-                    Adicionar Funcionário
+                    Adicionar
                 </button>
             </form>
         </div>
@@ -53,6 +50,7 @@
         <div class="lista-section card" style="margin-top: 30px;">
             <h2>Funcionários Cadastrados</h2>
             <p class="total-funcionarios">Total de funcionários: <strong>{{ total }}</strong></p>
+            
             {% if funcionarios %}
                 {% for funcionario in funcionarios %}
                     <div class="funcionario-item">
@@ -65,14 +63,23 @@
                                 {% endif %}
                             </span>
                         </div>
-                        <span class="funcionario-id">#{{ funcionario.id }}</span>
-                    </div>
+                        
+                        <div class="funcionario-actions">
+                            <span class="funcionario-id">#{{ funcionario.id }}</span>
+                            
+                            <a href="{% url 'pagina_editar' funcionario.id %}" class="btn btn-edit">Editar</a>
+                            
+                            <form action="{% url 'deletar_funcionario' funcionario.id %}" method="POST" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-delete">Deletar</button>
+                            </form>
+                        </div>
+                        </div>
                 {% endfor %}
             {% else %}
                 <p class="empty-state">Nenhum funcionário cadastrado.</p>
             {% endif %}
         </div>
-
     </div> 
 </body>
 </html>
