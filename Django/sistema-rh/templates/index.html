@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema RH - Início</title>
+    {% load static %}
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="main-container dashboard-container">
+        
+        <div class="header">
+            <h1>LEÃO RH</h1>
+        </div>
+
+        <div class="welcome-message card">
+            <h2>Bem-vindo ao RH do Leão</h2>
+            <p>Gerencie os funcionários do Leão de forma rápida e eficiente.</p>
+        </div>
+
+        <div class="dashboard-menu">
+            
+            <a href="{% url 'pagina_cadastro' %}" class="dashboard-card card">
+                <span class="card-icon">✚</span>
+                <h3>Cadastrar / Ver Funcionários</h3>
+                <p>Adicionar novos membros e ver a lista atual.</p>
+            </a>
+
+            </div>
+
+    </div> 
+</body>
+</html>

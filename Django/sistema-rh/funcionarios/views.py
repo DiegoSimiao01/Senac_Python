@@ -25,6 +25,7 @@ def pagina_principal(request):
     # Processar formulário
         nome = request.POST.get('nome')
         cargo = request.POST.get('cargo')
+        salario = request.POST.get('salario')
         departamento = request.POST.get('departamento')
         
         if nome and cargo:  # Campos obrigatórios
@@ -32,6 +33,7 @@ def pagina_principal(request):
                 'id': len(funcionarios) + 1,
                 'nome': nome,
                 'cargo': cargo,
+                'salario': salario,
                 'departamento': departamento
             }
             funcionarios.append(novo_funcionario)
@@ -40,7 +42,7 @@ def pagina_principal(request):
         'funcionarios': funcionarios,
         'total': len(funcionarios)
 }
-    return render(request, 'funcionarios/index.html', context)
+    return render(request, 'index.html', context)
 def api_funcionarios(request):
     """
     Endpoint JSON da API
