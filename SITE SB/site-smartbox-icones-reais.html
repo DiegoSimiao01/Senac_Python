@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartbox - Celulares e Acessórios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS --- */
+        :root {
+            --bg-black: #000000;
+            --bg-dark: #0a0a0a;
+            --bg-card: #121212;
+            
+            /* Paleta Dourada */
+            --gold-primary: #D4AF37;
+            --gold-light: #FEDC5E;
+            --gold-dark: #A67C00;
+            
+            --text-white: #FFFFFF;
+            --text-gray: #B0B0B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(to right, var(--gold-primary), var(--gold-light), var(--gold-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gold-gradient-bg {
+            background: linear-gradient(to right, var(--gold-dark), var(--gold-primary), var(--gold-dark));
+            color: var(--bg-black);
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'%3E%3C/path%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'%3E%3C/polyline%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'%3E%3C/line%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 0 5px var(--gold-primary));
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--gold-primary);
+            text-shadow: 0 0 8px var(--gold-primary);
+        }
+
+        .btn-contact {
+            padding: 10px 25px;
+            border: 2px solid var(--gold-primary);
+            border-radius: 50px;
+            color: var(--gold-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .btn-contact:hover {
+            background: var(--gold-primary);
+            color: var(--bg-black);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 80px 5% 100px;
+            min-height: 80vh;
+            background: radial-gradient(circle at 70% 50%, #1a1a00 0%, var(--bg-black) 60%);
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .btn-hero {
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+        }
+
+        /* --- ÁREA DAS IMAGENS NO BANNER (HERO) --- */
+        .hero-image-container {
+            position: relative;
+            width: 50%;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px; /* Profundidade 3D */
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: var(--gold-primary);
+            filter: blur(140px);
+            opacity: 0.18;
+            border-radius: 50%;
+            z-index: 0;
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        /* Estilo das imagens flutuantes */
+        .product-img {
+            position: absolute;
+            transition: transform 0.5s ease;
+            filter: drop-shadow(0 25px 35px rgba(0,0,0,0.6));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Posicionamento dos produtos no Banner */
+        .p-jbl {
+            width: 260px;
+            z-index: 1;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 0s;
+        }
+
+        .p-xiaomi {
+            width: 280px;
+            z-index: 2;
+            bottom: 60px;
+            left: 28%; 
+            transform: rotate(-5deg);
+            animation-delay: 1.5s;
+        }
+
+        .p-iphone {
+            width: 250px;
+            z-index: 3;
+            bottom: 30px;
+            right: 5%;
+            transform: rotate(5deg);
+            animation-delay: 2.5s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(var(--r, 0deg)) translateX(var(--x, 0)); }
+            50% { transform: translateY(-20px) rotate(var(--r, 0deg)) translateX(var(--x, 0)); }
+            100% { transform: translateY(0px) rotate(var(--r, 0deg)) translateX(var(--x, 0)); }
+        }
+        
+        @keyframes pulseGlow {
+            0% { opacity: 0.15; transform: scale(1); }
+            100% { opacity: 0.25; transform: scale(1.1); }
+        }
+
+
+        /* --- VANTAGENS --- */
+        .advantages {
+            padding: 60px 5%;
+            background-color: var(--bg-dark);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .advantage-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            max-width: 350px;
+        }
+
+        .advantage-icon {
+            font-size: 2.5rem;
+            color: var(--gold-primary);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .advantage-text h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--text-white);
+        }
+
+        .advantage-text p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* --- CATEGORIAS --- */
+        .categories {
+            padding: 100px 5%;
+            text-align: center;
+        }
+
+        h2.section-title {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .category-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.4s ease;
+            text-decoration: none;
+            color: var(--text-white);
+        }
+
+        .category-card:hover {
+            border-color: var(--gold-primary);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .category-image {
+            height: 220px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.4s;
+            padding: 30px;
+        }
+
+        /* Estilo das imagens nos cards de categoria */
+        .brand-img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+            transition: transform 0.4s ease;
+        }
+        
+        .category-card:hover .brand-img {
+            transform: scale(1.1);
+        }
+
+        /* SVG para Acessórios (que não tem imagem) */
+        .brand-logo-svg {
+            width: 100%; height: 100%; fill: #444; transition: 0.4s; max-width: 100px;
+        }
+        .category-card:hover .brand-logo-svg {
+            fill: var(--gold-primary); filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.5));
+        }
+
+        .category-info {
+            padding: 25px;
+            text-align: left;
+        }
+
+        .category-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        
+        .category-link {
+            color: var(--gold-primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .category-link::after {
+            content: '→';
+            transition: transform 0.3s;
+        }
+        
+        .category-card:hover .category-link::after {
+            transform: translateX(5px);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--bg-dark);
+            padding: 80px 5% 40px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: var(--gold-primary);
+        }
+        
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 15px; }
+        .footer-col ul li a {
+            text-decoration: none;
+            color: var(--text-gray);
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover { color: var(--gold-primary); }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 992px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 50px; }
+            .hero-content { margin-bottom: 60px; }
+            .hero-image-container { width: 100%; height: 400px; }
+            /* Ajustes Mobile */
+            .p-jbl { width: 180px; }
+            .p-xiaomi { width: 180px; left: -20px; bottom: 40px; }
+            .p-iphone { width: 160px; right: -10px; bottom: 20px; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon"></div>
+            <div class="logo-text gold-gradient-text">SmartBox - Celulares e Acessórios</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Apple</a></li>
+                <li><a href="#">Xiaomi</a></li>
+                <li><a href="#">JBL</a></li>
+                <li><a href="#">Acessórios</a></li>
+            </ul>
+        </nav>
+        <a href="#" class="btn-contact">Fale Conosco</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Tecnologia <span class="gold-gradient-text">Premium</span><br>na sua mão.</h1>
+            <p class="subtitle">Especialistas em importação. iPhones, JBL e Xiaomi com garantia, procedência e o melhor preço do mercado.</p>
+            <a href="#" class="btn-hero gold-gradient-bg">Ver Ofertas Exclusivas</a>
+        </div>
+        
+        <div class="hero-image-container">
+            <div class="hero-glow"></div>
+            
+            <img src="Captura_de_tela_de_2026-01-21_15-38-39-removebg-preview.png" 
+                 class="product-img p-jbl" 
+                 alt="Caixa JBL Partybox"
+                 style="--x: 0; --r: 0deg;">
+
+            <img src="Captura_de_tela_de_2026-01-21_15-34-41-removebg-preview.png" 
+                 class="product-img p-xiaomi" 
+                 alt="Celulares Xiaomi"
+                 style="--x: -15px; --r: -5deg;">
+
+            <img src="Captura_de_tela_de_2026-01-21_15-38-57-removebg-preview.png" 
+                 class="product-img p-iphone" 
+                 alt="iPhone 15 Pro Max"
+                 style="--x: 15px; --r: 5deg;">
+        </div>
+    </section>
+
+    <section class="categories">
+        <h2 class="section-title gold-gradient-text">Nossas Marcas</h2>
+        <div class="category-grid">
+            
+            <a href="#" class="category-card">
+                <div class="category-image">
+                    <img src="Captura_de_tela_de_2026-01-21_15-38-57-removebg-preview.png" alt="iPhone 15" class="brand-img">
+                </div>
+                <div class="category-info">
+                    <h3>Mundo Apple</h3>
+                    <p class="subtitle" style="margin-bottom: 20px;">iPhones, iPads, Watches e MacBooks.</p>
+                    <span class="category-link">Explorar</span>
+                </div>
+            </a>
+            
+            <a href="#" class="category-card">
+                <div class="category-image">
+                    <img src="Captura_de_tela_de_2026-01-21_15-38-39-removebg-preview.png" alt="Caixa JBL" class="brand-img">
+                </div>
+                <div class="category-info">
+                    <h3>Áudio JBL</h3>
+                    <p class="subtitle" style="margin-bottom: 20px;">Caixas de som, fones e soundbars.</p>
+                    <span class="category-link">Ver Produtos</span>
+                </div>
+            </a>
+            
+            <a href="#" class="category-card">
+                <div class="category-image">
+                    <img src="Captura_de_tela_de_2026-01-21_15-34-41-removebg-preview.png" alt="Celulares Xiaomi" class="brand-img">
+                </div>
+                <div class="category-info">
+                    <h3>Universo Xiaomi</h3>
+                    <p class="subtitle" style="margin-bottom: 20px;">Smartphones e linha Mi Home.</p>
+                    <span class="category-link">Conhecer</span>
+                </div>
+            </a>
+            
+            <a href="#" class="category-card">
+                <div class="category-image">
+                    <svg class="brand-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 15.5c0 .83.67 1.5 1.5 1.5h7c.83 0 1.5-.67 1.5-1.5v-2.5h-10v2.5zm10-5.5h-2v-2.5c0-1.66-1.34-3-3-3s-3 1.34-3 3v2.5h-2v2h10v-2z"/>
+                        <path d="M12 2C9.24 2 7 4.24 7 7v3h10V7c0-2.76-2.24-5-5-5z" opacity=".3"/>
+                    </svg>
+                </div>
+                <div class="category-info">
+                    <h3>Acessórios Premium</h3>
+                    <p class="subtitle" style="margin-bottom: 20px;">Capas, películas e carregadores.</p>
+                    <span class="category-link">Ver Todos</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4 style="color:var(--gold-primary)">SmartBox - Celulares e Acessórios</h4>
+                <p class="subtitle">Sua loja de importados de confiança. Tecnologia de ponta ao seu alcance.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Catálogo</a></li>
+                    <li><a href="#">Sobre Nós</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Atendimento</h4>
+                <ul>
+                    <li><a href="#">Fale no WhatsApp</a></li>
+                    <li><a href="#">contato@smartbox.com</a></li>
+                    <li><a href="#">Seg-Sáb: 9h às 18h</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 SmartBox - Celulares e Acessórios. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
